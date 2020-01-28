@@ -1,5 +1,8 @@
 {-# OPTIONS -Wincomplete-patterns -Werror=incomplete-patterns #-}
 
+import Data.List
+import Data.Char
+
 doubleMe x = x + x
 doubleUs x y = doubleMe x + doubleMe y
 doubleSmallNumber x = if x > 100
@@ -281,3 +284,15 @@ and' xs = foldr (&&) True xs
 
 sqrtSums :: Int
 sqrtSums  = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
+
+numUniques :: (Eq a) => [a] -> Int
+numUniques = length . nub
+
+wordNums :: String -> [(String, Int)]
+wordNums = map (\ws -> (head ws, length ws)) . group . sort . words
+
+isIn :: (Eq a) => [a] -> [a] -> Bool
+needle `isIn` haystack = any (needle `isPrefixOf`) (tails haystack)
+
+encode :: Int -> String -> String
+encode offset msg = map (\c -> chr $ ord c + offset) msg
