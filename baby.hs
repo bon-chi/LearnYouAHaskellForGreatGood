@@ -2,6 +2,10 @@
 
 import Data.List
 import Data.Char
+import qualified Data.Map as Map
+import qualified Geometry.Sphere as Sphere
+import qualified Geometry.Cuboid as Cuboid
+import qualified Geometry.Cube as Cube
 
 doubleMe x = x + x
 doubleUs x y = doubleMe x + doubleMe y
@@ -308,3 +312,87 @@ firstTo40 = find (\x -> digitSum x == 40) [1..]
 
 firstTo :: Int -> Maybe Int
 firstTo n = find (\x -> digitSum x == n) [1..]
+
+findKey :: (Eq k) => k -> [(k, v)] -> Maybe v
+findKey key [] = Nothing
+findKey key ((k, v) :xs)
+  |  key == k = Just v
+  | otherwise = findKey key xs
+
+findKey' :: (Eq k) => k -> [(k, v)] -> Maybe v
+findKey' key xs = foldr (\(k, v) acc -> if key == k then Just v else acc) Nothing xs
+
+phoneBook :: Map.Map String String
+phoneBook = Map.fromList
+  [("betty", "555-2938")
+  ,("bonnie", "452-2928")
+  ,("patsy", "493-2928")
+  ,("lucille", "205-2928")
+  ,("wendy", "939-8282")
+  ,("penny", "853-2492")
+  ]
+
+string2digits :: String -> [Int]
+string2digits = map digitToInt . filter isDigit
+
+phoneBook' =
+  [("betty", "555-2938")
+  ,("betty", "342-2492")
+  ,("bonnie", "452-2928")
+  ,("patsy", "493-2928")
+  ,("patsy", "943-2929")
+  ,("patsy", "827-9162")
+  ,("lucille", "205-2928")
+  ,("wendy", "939-8282")
+  ,("penny", "853-2492")
+  ,("penny", "555-2111")
+  ]
+
+phoneBookToMap :: (Ord k) => [(k, String)] -> Map.Map k String
+phoneBookToMap xs = Map.fromListWith add xs
+  where add number1 number2 = number1 ++ ", " ++ number2
+
+phoneBookToMap' :: (Ord k) => [(k, a)] -> Map.Map k [a]
+phoneBookToMap' xs = Map.fromListWith (++) $ map (\(k, v) -> (k, [v])) xs
+
+data Person = Person { firstName :: String
+                     , lastName :: String
+                     , age :: Int
+                     , height :: Float
+                     , phoneNumber :: String
+                     , flavor :: String } deriving (Show)
+
+data Car = Car { company :: String
+               , model :: String
+               , year :: Int
+               } deriving (Show)
+
+tellCar :: Car -> String
+tellCar (Car {company = c, model = m, year = y}) = "This " ++ c ++ " " ++ m ++ " was made in " ++ show y
+
+data Vector a = Vector a a a deriving (Show)
+
+vplus :: (Num a) => Vector a -> Vector a -> Vector a
+(Vector i j k) `vplus` (Vector l m n) = Vector (i+l) (j+m) (k+n)
+
+dotProd :: (Num a) => Vector a -> Vector a -> a
+(Vector i j k) `dotProd` (Vector l m n) = i*l + j*m + k*n
+
+vmult :: (Num a) => Vector a -> a -> Vector a
+(Vector i j k) `vmult` m = Vector (i*m) (j*m) (k*m)
+
+data Person' = Person' { firstName' :: String
+                     , lastName' :: String
+                     , age' :: Int
+                     } deriving (Eq, Show, Read)
+
+mikeD = Person' {firstName' = "Michael", lastName' = "Diamond", age' = 43}
+adRock = Person' {firstName' = "Adam", lastName' = "Horovitz", age' = 41}
+mca = Person' {firstName' = "Adam", lastName' = "Yauch", age' = 44}
+mysteryDude = "Person' { firstName' =\"Michael\"" ++
+                     ", lastName' =\"Diamond\"" ++
+                     ", age' = 43}"
+
+data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+          deriving (Eq, Ord, Show, Read, Bounded, Enum)
+
