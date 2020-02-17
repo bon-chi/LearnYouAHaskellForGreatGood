@@ -370,18 +370,14 @@ data Car = Car { company :: String
 tellCar :: Car -> String
 tellCar (Car {company = c, model = m, year = y}) = "This " ++ c ++ " " ++ m ++ " was made in " ++ show y
 
--- aは型引数
--- 左のVectorは型コンストラクタ
--- 型を引数にとって新しい型を作る
--- 値コンストラクタは引数をとって新しい値を生み出す
--- = の左が型コンストラクタ、右が値コンストラクタ
--- 関数の型注釈には型コンストラクタを使う?
 data Vector a = Vector a a a deriving (Show)
--- data Vector2 a = Vector22 a a a deriving (Show)
--- vplus2 :: (Num a) => Vector2 a -> Vector2 a -> Vector2 a
+data Vector2 a = Vector22 a a a deriving (Show)
 
 vplus :: (Num a) => Vector a -> Vector a -> Vector a
 (Vector i j k) `vplus` (Vector l m n) = Vector (i+l) (j+m) (k+n)
+
+vplus2 :: (Num a) => Vector2 a -> Vector2 a -> Vector2 a
+(Vector22 i j k) `vplus2` (Vector22 l m n) = Vector22 (i+l) (j+m) (k+n)
 
 dotProd :: (Num a) => Vector a -> Vector a -> a
 (Vector i j k) `dotProd` (Vector l m n) = i*l + j*m + k*n
@@ -401,8 +397,6 @@ mysteryDude = "Person' { firstName' =\"Michael\"" ++
                      ", lastName' =\"Diamond\"" ++
                      ", age' = 43}"
 
---  Monday, Tuesdayは値コンストラクタ。型がとり得る値の種類を表す
--- 値コンストラクタはそのデータ型の値を返す関数
 data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
           deriving (Eq, Ord, Show, Read, Bounded, Enum)
 
