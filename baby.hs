@@ -20,7 +20,7 @@ removeNonUppercase st = [ c | c <- st, c `elem` ['A' .. 'Z']]
 
 lucky :: Int-> String
 lucky 7 = "LUCKY NUMBER SEVEN!"
-lucky x = "Sorry, you're out of luck pal! : " ++ show x 
+lucky x = "Sorry, you're out of luck pal! : " ++ show x
 
 sayMe :: Int -> String
 sayMe 1 = "One!"
@@ -401,7 +401,7 @@ data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
           deriving (Eq, Ord, Show, Read, Bounded, Enum)
 
 phoneBook''' :: [(String, String)]
-phoneBook''' = 
+phoneBook''' =
   [("betty", "555-2938")
   ,("bonnie", "452-2928")
   ,("patsy", "493-2928")
@@ -430,10 +430,10 @@ lockers :: LockerMap
 lockers = Map.fromList
   [(100,(Taken, "ZD39I"))
   ,(101,(Free, "JAH3I"))
-  ,(103,(Free, "IQSA9")) 
-  ,(105,(Free, "QOTSA")) 
-  ,(109,(Taken, "893JJ")) 
-  ,(110,(Taken, "99292")) 
+  ,(103,(Free, "IQSA9"))
+  ,(105,(Free, "QOTSA"))
+  ,(109,(Taken, "893JJ"))
+  ,(110,(Taken, "99292"))
   ]
 
 -- data List a = Empty | Cons a (List a) deriving (Show, Read, Eq, Ord)
@@ -458,3 +458,23 @@ treeInsert x (Node a left right)
   | x < a = Node a (treeInsert x left) right
   | x > a = Node a left (treeInsert x right)
   | otherwise = EmptyTree
+
+treeElem :: (Ord a) => a -> Tree a -> Bool
+treeElem x EmptyTree = False
+treeElem x (Node a left right)
+  | x == a = True
+  | x < a = treeElem x left
+  | x > a = treeElem x right
+treeElem _ Node {} = False
+
+data TrafficLight = Red | Yellow | Green
+instance Eq TrafficLight where
+  Red == Red = True 
+  Green == Green = True 
+  Yellow == Yellow = True 
+  _ == _ = False
+
+instance Show TrafficLight where
+  show Red = "Red light"
+  show Yellow = "Yellow light"
+  show Green = "Green light"
